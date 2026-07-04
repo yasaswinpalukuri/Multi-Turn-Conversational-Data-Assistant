@@ -1,3 +1,4 @@
+![Tests](https://github.com/yasaswinpalukuri/Multi-Turn-Conversational-Data-Assistant/actions/workflows/tests.yml/badge.svg)
 # Multi-Turn Conversational Data Assistant
 
 A production-quality local AI assistant that answers natural language questions
