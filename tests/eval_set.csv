@@ -1,0 +1,21 @@
+id,question,answer_type,expected_pattern,tool_expected,notes
+1,How many rows are in this dataset?,numeric,97723,pandas,Exact match after cleaning
+2,What are all the column names?,list,tpep_pickup_datetime,schema,Must include at least one known column
+3,What is the average trip distance?,numeric,3.0,pandas,Should be ~3.0 miles +/- 0.5
+4,Which payment type is most common?,categorical,Credit card,pandas,Should return Credit card
+5,What is the maximum fare amount?,numeric,70.0,pandas,Capped at 99th pct ~$70
+6,How many trips had zero passengers?,numeric,0,pandas,passenger_count filled with 1.0 so should be 0
+7,What is the average tip percentage for credit card payments?,numeric,20.0,pandas,Should be ~20% +/- 10%
+8,Which hour of the day has the most pickups?,numeric,18,pandas,Evening rush hour expected
+9,What percentage of trips lasted more than 30 minutes?,numeric,8.0,pandas,Should be ~8% +/- 5%
+10,What is the correlation between trip distance and fare amount?,numeric,0.85,pandas,Should be > 0.7 strong positive
+11,Show me the top 5 pickup locations by trip count,table,PULocationID,sql,Should return a table with location IDs
+12,What was my first question?,memory,How many rows,memory,Must reference first question in session
+13,What did I ask about payment types?,memory,payment,memory,Should find turn 4 question
+14,How many questions have I asked so far?,memory,14,memory,Should count turns accurately
+15,What is the median fare amount?,numeric,10.0,pandas,Should be ~$10 +/- $3
+16,How many trips had a tip greater than $10?,numeric,5000,pandas,Rough ballpark only
+17,What is the average speed in mph for trips over 5 miles?,numeric,15.0,pandas,Should use speed_mph column
+18,Which day of the week has the highest average fare?,categorical,Monday,pandas,Day name expected
+19,What percentage of trips had surcharge applied?,numeric,80.0,pandas,Should use has_surcharge column
+20,Summarize everything we have discussed so far,summary,discussed,memory,Must reference multiple prior turns

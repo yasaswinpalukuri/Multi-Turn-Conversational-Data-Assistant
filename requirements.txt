@@ -1,0 +1,50 @@
+# ============================================================
+# Multi-Turn Conversational Data Assistant
+# requirements.txt — pinned for reproducibility
+# Python 3.11+ recommended (tested on 3.11.x, WSL2)
+# Last verified: July 2025
+# ============================================================
+
+# ── LangChain ecosystem ─────────────────────────────────────
+# IMPORTANT: 0.3.x series — do NOT upgrade to 1.x without
+# reading the migration guide. ConversationBufferWindowMemory
+# moved to langchain-community in 1.x, and agent APIs changed.
+langchain==0.3.25
+langchain-core==0.3.59
+langchain-community==0.3.23
+# langchain-ollama 0.2.x pairs with langchain 0.3.x
+# langchain-ollama 1.x pairs with langchain 1.x — do not mix
+langchain-ollama==0.2.3
+
+# ── Local LLM ───────────────────────────────────────────────
+# ollama Python SDK — used for health-check ping only.
+# The LLM itself is driven through langchain-ollama.
+ollama==0.4.9
+
+# ── Vector store for conversation memory ────────────────────
+# chromadb 0.6.x — stable API, built-in DefaultEmbeddingFunction
+# avoids pulling in full sentence-transformers + PyTorch,
+# which conflicts with Ollama's CUDA on WSL2.
+chromadb==0.6.3
+
+# ── Data layer ──────────────────────────────────────────────
+# pandas 2.2.3 — NOT 3.x. Pandas 3 enables Copy-on-Write by
+# default; LLM-generated code will frequently trigger warnings
+# or silent failures on inplace operations. Pin to 2.2.x.
+pandas==2.2.3
+numpy==1.26.4  # numpy 2.x has breaking C API changes; 1.26.x is safest with pandas 2.2.x
+
+# ── UI ──────────────────────────────────────────────────────
+streamlit==1.43.2  # 1.44+ changed chat_message avatar handling; 1.43.x is stable
+
+# ── Utilities ───────────────────────────────────────────────
+python-dotenv==1.0.1   # .env loading for config
+pyarrow==19.0.1        # needed by pandas for parquet; also improves st.dataframe perf
+
+# ── Testing ─────────────────────────────────────────────────
+pytest==8.3.5
+pytest-asyncio==0.24.0  # for any async tool tests
+
+# ── Dev / optional ──────────────────────────────────────────
+# Uncomment if you want richer DataFrames in Streamlit:
+# plotly==5.22.0

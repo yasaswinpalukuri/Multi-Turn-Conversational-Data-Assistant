@@ -1,0 +1,39 @@
+2026-07-03 19:11:09,187 | INFO | EXEC | 2026-07-03T19:11:09.186541 | Code: 'result = len(df)'
+2026-07-03 19:11:09,193 | INFO | SUCCESS | 2026-07-03T19:11:09.186541 | Result type: int
+2026-07-03 19:11:13,461 | INFO | EXEC | 2026-07-03T19:11:13.461828 | Code: "result = df['fare_amount'].mean()"
+2026-07-03 19:11:13,462 | INFO | SUCCESS | 2026-07-03T19:11:13.461828 | Result type: float64
+2026-07-03 19:20:40,115 | WARNING | BLOCKED | 2026-07-03T19:20:40.115282 | Reason: Blocked pattern detected: 'import os' | Code: "import os; result = os.system('echo hacked')"
+2026-07-03 19:20:40,118 | WARNING | BLOCKED | 2026-07-03T19:20:40.118595 | Reason: Blocked pattern detected: 'open(' | Code: "result = open('/etc/passwd').read()"
+2026-07-03 19:20:40,232 | INFO | EXEC | 2026-07-03T19:20:40.232925 | Code: 'result = len(df)'
+2026-07-03 19:20:40,233 | INFO | SUCCESS | 2026-07-03T19:20:40.232925 | Result type: int
+2026-07-03 19:20:40,237 | INFO | EXEC | 2026-07-03T19:20:40.237944 | Code: "result = df['fare_amount'].mean()"
+2026-07-03 19:20:40,238 | INFO | SUCCESS | 2026-07-03T19:20:40.237944 | Result type: float64
+2026-07-03 19:20:40,241 | INFO | EXEC | 2026-07-03T19:20:40.241219 | Code: "result = df['fare_amount'].max()"
+2026-07-03 19:20:40,241 | INFO | SUCCESS | 2026-07-03T19:20:40.241219 | Result type: float64
+2026-07-03 19:20:40,243 | INFO | EXEC | 2026-07-03T19:20:40.243951 | Code: "result = df['payment_type_label'].value_counts()"
+2026-07-03 19:20:40,253 | INFO | SUCCESS | 2026-07-03T19:20:40.243951 | Result type: Series
+2026-07-03 19:20:40,256 | INFO | EXEC | 2026-07-03T19:20:40.256366 | Code: "result = df['trip_distance'].mean()"
+2026-07-03 19:20:40,256 | INFO | SUCCESS | 2026-07-03T19:20:40.256366 | Result type: float64
+2026-07-03 19:20:40,259 | INFO | EXEC | 2026-07-03T19:20:40.259135 | Code: "result = df['nonexistent_column'].mean()"
+2026-07-03 19:20:40,259 | ERROR | ERROR | 2026-07-03T19:20:40.259135 | KeyError: 'nonexistent_column' | Code: "result = df['nonexistent_column'].mean()"
+2026-07-03 19:20:40,261 | INFO | EXEC | 2026-07-03T19:20:40.261510 | Code: "x = df['fare_amount'].mean()"
+2026-07-03 19:20:40,261 | WARNING | NO_RESULT | 2026-07-03T19:20:40.261510 | Code did not set 'result'
+2026-07-03 19:20:40,263 | INFO | SQL_EXEC | 2026-07-03T19:20:40.263972 | Query: 'SELECT COUNT(*) as total FROM trips'
+2026-07-03 19:20:40,743 | INFO | SQL_SUCCESS | 2026-07-03T19:20:40.263972 | Rows returned: 1
+2026-07-03 19:20:40,779 | INFO | SQL_EXEC | 2026-07-03T19:20:40.779811 | Query: 'SELECT AVG(fare_amount) FROM trips'
+2026-07-03 19:20:41,210 | INFO | SQL_SUCCESS | 2026-07-03T19:20:40.779811 | Rows returned: 1
+2026-07-03 19:20:41,214 | INFO | SQL_EXEC | 2026-07-03T19:20:41.214878 | Query: 'SELECT PULocationID, COUNT(*) as cnt FROM trips GROUP BY PULocationID ORDER BY cnt DESC LIMIT 5'
+2026-07-03 19:20:41,673 | INFO | SQL_SUCCESS | 2026-07-03T19:20:41.214878 | Rows returned: 5
+2026-07-03 19:20:41,676 | INFO | SQL_EXEC | 2026-07-03T19:20:41.676720 | Query: 'SELECT MAX(fare_amount) FROM trips'
+2026-07-03 19:20:42,099 | INFO | SQL_SUCCESS | 2026-07-03T19:20:41.676720 | Rows returned: 1
+2026-07-03 19:20:42,102 | WARNING | SQL_BLOCKED | Non-SELECT statement attempted: 'DROP TABLE trips'
+2026-07-03 19:20:42,104 | WARNING | SQL_BLOCKED | Non-SELECT statement attempted: 'DELETE FROM trips WHERE 1=1'
+2026-07-03 19:20:42,107 | WARNING | SQL_BLOCKED | Non-SELECT statement attempted: 'INSERT INTO trips VALUES (1,2,3)'
+2026-07-03 19:38:37,431 | INFO | EXEC | 2026-07-03T19:38:37.430977 | Code: 'result = len(df)'
+2026-07-03 19:38:37,436 | INFO | SUCCESS | 2026-07-03T19:38:37.430977 | Result type: int
+2026-07-03 19:38:46,533 | INFO | EXEC | 2026-07-03T19:38:46.533235 | Code: "result = df['fare_amount'].mean()"
+2026-07-03 19:38:46,534 | INFO | SUCCESS | 2026-07-03T19:38:46.533235 | Result type: float64
+2026-07-03 19:38:54,089 | INFO | EXEC | 2026-07-03T19:38:54.089881 | Code: "result = df['payment_type_label'].mode()[0]"
+2026-07-03 19:38:54,103 | INFO | SUCCESS | 2026-07-03T19:38:54.089881 | Result type: str
+2026-07-03 19:40:40,587 | INFO | EXEC | 2026-07-03T19:40:40.587650 | Code: "result = df.groupby('pickup_hour')['payment_type_label'].value_counts().idxmax()[0]"
+2026-07-03 19:40:40,617 | INFO | SUCCESS | 2026-07-03T19:40:40.587650 | Result type: int32
