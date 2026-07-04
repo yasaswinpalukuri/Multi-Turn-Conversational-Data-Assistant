@@ -1,0 +1,109 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate sample dataset
+        run: |
+          python3 -c "
+          import pandas as pd
+          import numpy as np
+
+          # Generate a synthetic 5000-row dataset matching the real schema
+          # so CI tests pass without the 30MB CSV in the repo
+          np.random.seed(42)
+          n = 5000
+
+          pickup = pd.date_range('2023-01-01', periods=n, freq='10min')
+          dropoff = pickup + pd.to_timedelta(np.random.randint(3, 60, n), unit='m')
+
+          df = pd.DataFrame({
+              'VendorID':               np.random.choice([1, 2], n),
+              'tpep_pickup_datetime':   pickup,
+              'tpep_dropoff_datetime':  dropoff,
+              'passenger_count':        np.random.choice([1,2,3,4,5], n),
+              'trip_distance':          np.random.uniform(0.5, 20, n).round(2),
+              'RatecodeID':             np.random.choice([1,2,3,4,5,6], n),
+              'store_and_fwd_flag':     np.random.choice(['Y','N'], n),
+              'PULocationID':           np.random.randint(1, 265, n),
+              'DOLocationID':           np.random.randint(1, 265, n),
+              'payment_type':           np.random.choice([1,2,3,4], n,
+                                            p=[0.72, 0.24, 0.02, 0.02]),
+              'fare_amount':            np.random.uniform(3, 70, n).round(2),
+              'extra':                  np.random.choice([0, 0.5, 1], n),
+              'mta_tax':                np.random.choice([0, 0.5], n),
+              'tip_amount':             np.random.uniform(0, 15, n).round(2),
+              'tolls_amount':           np.random.choice([0, 6.12], n),
+              'improvement_surcharge':  np.random.choice([0, 0.3], n),
+              'total_amount':           np.random.uniform(5, 90, n).round(2),
+              'congestion_surcharge':   np.random.choice([0, 2.5], n),
+              'airport_fee':            np.random.choice([0, 1.25], n),
+          })
+
+          import os
+          os.makedirs('data', exist_ok=True)
+          df.to_csv('data/nyc_taxi_sample.csv', index=False)
+          print(f'Generated synthetic dataset: {len(df)} rows')
+          "
+
+      - name: Set environment variables
+        run: |
+          echo "ANONYMIZED_TELEMETRY=False" >> $GITHUB_ENV
+          echo "CHROMA_TELEMETRY=False"     >> $GITHUB_ENV
+          echo "DATA_PATH=data/nyc_taxi_sample.csv" >> $GITHUB_ENV
+          echo "OLLAMA_BASE_URL=http://localhost:11434" >> $GITHUB_ENV
+          echo "OLLAMA_MODEL=qwen2.5:7b"    >> $GITHUB_ENV
+          echo "CHROMA_PERSIST_DIR=.chroma_store" >> $GITHUB_ENV
+          echo "CHROMA_COLLECTION=conversation_history" >> $GITHUB_ENV
+          echo "MEMORY_WINDOW_K=15"         >> $GITHUB_ENV
+          echo "EXEC_LOG_PATH=logs/executions.log" >> $GITHUB_ENV
+          echo "LOG_LEVEL=WARNING"          >> $GITHUB_ENV
+          echo "SESSION_PREFIX=session"     >> $GITHUB_ENV
+
+      - name: Create required directories
+        run: mkdir -p logs .chroma_store
+
+      - name: Run tests
+        run: |
+          pytest tests/test_tools.py tests/test_memory.py \
+            -v \
+            --tb=short \
+            --no-header \
+            -q
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: execution-logs
+          path: logs/
+          retention-days: 7
