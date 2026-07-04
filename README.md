@@ -56,8 +56,7 @@ data_assistant/
 │   └── eval_set.csv          # 20 ground-truth evaluation questions
 ├── logs/
 │   └── executions.log        # Audit log of every exec() attempt
-├── requirements.txt
-└── .env.example
+└── requirements.txt
 ```
 
 ---
